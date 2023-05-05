@@ -40,10 +40,11 @@
         const data = encoder.encode(keyOrigin);
         key.set(data);
         return {
-          key: key.slice(0, size),
-          iv: key.slice(0, 16)
+          key: CryptoJS.enc.Hex.stringify(CryptoJS.lib.WordArray.create(key.slice(0, size))),
+          iv: CryptoJS.enc.Hex.stringify(CryptoJS.lib.WordArray.create(key.slice(0, 16)))
         }
       }
+
       // Get the authorization code from the query string parameters
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
