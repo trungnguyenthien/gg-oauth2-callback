@@ -18,7 +18,7 @@
   </body>
 
   <script>
-    async function aes2descrypt2Object56Decrypt(encryptedString, keyOrigin) {
+    async function descrypt2Object(encryptedString, keyOrigin) {
       const keyIV = createKeyIV(keyOrigin);
       const key = await crypto.subtle.importKey(
         'raw', keyIV.key, { name: 'AES-CBC' }, false, ['decrypt']
