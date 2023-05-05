@@ -10,7 +10,9 @@
 
   <body>
     <h1>OAuth2 Callback</h1>
-
+    <div>
+      STATE = <code id="txtState"></code>
+    </div>
     <code id="atoken"></code>
   </body>
 
@@ -32,7 +34,7 @@
           }
         );
 
-        const decryptedString = decrypted.toString(CryptoJS.enc.Utf16);
+        const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
         return JSON.parse(decryptedString);
       }
 
@@ -52,7 +54,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       const state = urlParams.get('state');
-
+      $('#txtState').text(state);
       let credentials = aes256Decrypt(state, '711084')
 
       // Send a request to exchange the authorization code for an access token
