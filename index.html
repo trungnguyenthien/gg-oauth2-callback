@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>OAuth2 Callback</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js" integrity="sha512-RjvSEaeDqPCfUVQ9kna2/2OqHz/7F04IOl1/66LmQjB/lOeAzwq7LrbTzDbz5cJzlPNJ5qteNtHR56XaJSTNWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
   </head>
 
@@ -22,7 +21,7 @@
       try {
         const response = await axios.post('https://dauden.cloud/node-token-updrive/decode', rawBody);
         console.log(response.data); // handle response data here
-        return JSON.parse(response.data);
+        return response.data;
       } catch (error) {
         console.error(error); // handle error here
         return null;
