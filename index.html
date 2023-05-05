@@ -26,10 +26,13 @@
         const decrypted = CryptoJS.AES.decrypt(
           cipherParams,
           CryptoJS.enc.Utf8.parse(keyIV.key),
-          { iv: CryptoJS.enc.Hex.parse(keyIV.iv), mode: CryptoJS.mode.CBC }
+          { 
+            iv: CryptoJS.enc.Hex.parse(keyIV.iv), 
+            mode: CryptoJS.mode.CBC 
+          }
         );
 
-        const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+        const decryptedString = decrypted.toString(CryptoJS.enc.Utf16);
         return JSON.parse(decryptedString);
       }
 
