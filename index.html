@@ -11,16 +11,9 @@
   <body>
     <h1>OAuth2 Callback</h1>
     <h2>Credentials</h2>
-    <pre>
-      <div id="txtState"></div>
-    </pre>
-
-    <br />
+    <pre><div id="txtState"></div></pre>
     <h2>TOKEN</h2>
-    <pre>
-      <code id="atoken"></code>
-    </pre>
-
+    <pre><div id="txtToken"></div></pre>
   </body>
 
   <script>
@@ -66,7 +59,7 @@
 
       const response = await axios.post(credentials.token_uri, requestBody.toString(), config);
 
-      $('#atoken').text(JSON.stringify(response.data, null, 2))
+      $('#txtToken').text(JSON.stringify(response.data, null, 2))
 
       // xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
     });
