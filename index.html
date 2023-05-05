@@ -15,59 +15,64 @@
   </body>
 
   <script>
-    function createKeyIV(keyOrigin) {
-      const size = 32;
-      const key = new Uint8Array(size);
-      const encoder = new TextEncoder();
-      const keyOriginBytes = encoder.encode(keyOrigin);
-      key.set(keyOriginBytes);
+    $(document).ready(function () {
+      console.log("ready!");
+      function createKeyIV(keyOrigin) {
+        const size = 32;
+        const key = new Uint8Array(size);
+        const encoder = new TextEncoder();
+        const keyOriginBytes = encoder.encode(keyOrigin);
+        key.set(keyOriginBytes);
 
-      return {
-        key: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, size))),
-        iv: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, 16)))
+        return {
+          key: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, size))),
+          iv: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, 16)))
+        }
       }
-    }
-    function aes256Decrypt(encryptedString, keyOrigin) {
-      const keyIV = createKeyIV(keyOrigin);
-      const cipherParams = CryptoJS.lib.CipherParams.create({
-        ciphertext: CryptoJS.enc.Base64.parse(encryptedString)
-      });
+      function aes256Decrypt(encryptedString, keyOrigin) {
+        const keyIV = createKeyIV(keyOrigin);
+        const cipherParams = CryptoJS.lib.CipherParams.create({
+          ciphertext: CryptoJS.enc.Base64.parse(encryptedString)
+        });
 
-      const decrypted = CryptoJS.AES.decrypt(
-        cipherParams,
-        keyIV.key,
-        { iv: keyIV.iv, mode: CryptoJS.mode.CBC }
-      );
+        const decrypted = CryptoJS.AES.decrypt(
+          cipherParams,
+          keyIV.key,
+          { iv: keyIV.iv, mode: CryptoJS.mode.CBC }
+        );
 
-      const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-      return JSON.parse(decryptedString);
-    }
-    // Get the authorization code from the query string parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const state = urlParams.get('state');
-
-    let credentials = aes256Decrypt(state, '711084')
-
-    // Send a request to exchange the authorization code for an access token
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', credentials.token_uri);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        // Handle the response from the server
-        const response = JSON.parse(xhr.responseText);
-        const accessToken = response.access_token;
-        const expiresIn = response.expires_in;
-        const tokenType = response.token_type;
-        // Do something with the access token, such as storing it in a cookie or session
-        $('#atoken').text(accessToken)
-      } else {
-        // Handle the error from the server
-        console.error('Failed to exchange authorization code for access token');
+        const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+        return JSON.parse(decryptedString);
       }
-    };
-    xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
+      // Get the authorization code from the query string parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const state = urlParams.get('state');
+
+      let credentials = aes256Decrypt(state, '711084')
+
+      // Send a request to exchange the authorization code for an access token
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', credentials.token_uri);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          // Handle the response from the server
+          const response = JSON.parse(xhr.responseText);
+          const accessToken = response.access_token;
+          const expiresIn = response.expires_in;
+          const tokenType = response.token_type;
+          // Do something with the access token, such as storing it in a cookie or session
+          $('#atoken').text(accessToken)
+        } else {
+          // Handle the error from the server
+          console.error('Failed to exchange authorization code for access token');
+        }
+      };
+      xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
+    });
+
+
   </script>
 
 </html>
