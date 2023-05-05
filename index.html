@@ -14,14 +14,16 @@
     <script>
       function createKeyIV(keyOrigin) {
         const size = 32;
-        const key = Buffer.alloc(size, '\0');
-        keyOrigin = Buffer.from(keyOrigin, 'utf8');
-        keyOrigin.copy(key);
+        const key = new Uint8Array(size);
+        const encoder = new TextEncoder();
+        const keyOriginBytes = encoder.encode(keyOrigin);
+        key.set(keyOriginBytes.slice(0, size));
         return {
-          key: Buffer.from(key.slice(0, size)),
+          key: key.slice(0, size),
           iv: key.slice(0, 16)
-        }
+        };
       }
+
 
       function descrypt2Object(encryptedText, key) {
         const keyIv = createKeyIV(key)
