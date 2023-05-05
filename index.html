@@ -4,6 +4,9 @@
   <head>
     <meta charset="UTF-8">
     <title>OAuth2 Callback</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js" integrity="sha512-RjvSEaeDqPCfUVQ9kna2/2OqHz/7F04IOl1/66LmQjB/lOeAzwq7LrbTzDbz5cJzlPNJ5qteNtHR56XaJSTNWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
   </head>
@@ -11,9 +14,9 @@
   <body>
     <h1>OAuth2 Callback</h1>
     <h2>Credentials</h2>
-    <pre><div id="txtState"></div></pre>
+    <pre><code id="txtState" class="json"></code></pre>
     <h2>TOKEN</h2>
-    <pre><div id="txtToken"></div></pre>
+    <pre><code id="txtToken" class="json"></code></pre>
   </body>
 
   <script>
