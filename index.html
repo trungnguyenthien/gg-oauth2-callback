@@ -41,25 +41,17 @@
         credentials = credentials.web
       }
 
-      // Send a request to exchange the authorization code for an access token
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', credentials.token_uri);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          // Handle the response from the server
-          const response = JSON.parse(xhr.responseText);
-          const accessToken = response.access_token;
-          const expiresIn = response.expires_in;
-          const tokenType = response.token_type;
-          // Do something with the access token, such as storing it in a cookie or session
-          $('#atoken').text(accessToken)
-        } else {
-          // Handle the error from the server
-          console.error('Failed to exchange authorization code for access token');
-        }
-      };
-      xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
+      const response = await axios.post(credentials.token_uri, {
+        code: code,
+        client_id: credentials.client_id,
+        client_secret: credentials.client_secret,
+        redirect_uri: credentials.redirect_uris[0],
+        grant_type: 'authorization_code'
+      })
+
+      $('#atoken').text(JSON.stringify(response.data))
+
+      // xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
     });
 
 
