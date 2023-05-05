@@ -10,9 +10,10 @@
 
   <body>
     <h1>OAuth2 Callback</h1>
-    <div>
-      STATE = <code id="txtState"></code>
-    </div>
+    <h2>Credentials</h2>
+    <div id="txtState"></div>
+    <br/>
+    <h2>TOKEN</h2>
     <code id="atoken"></code>
   </body>
 
@@ -35,8 +36,11 @@
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       const state = urlParams.get('state');
-      $('#txtState').text(state);
+     
       let credentials = await decode(state)
+
+      $('#txtState').text(JSON.stringify(credentials));
+
       if (credentials.web) {
         credentials = credentials.web
       }
