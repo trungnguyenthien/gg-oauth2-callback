@@ -18,6 +18,24 @@
   </body>
 
   <script>
+    async function aes2descrypt2Object56Decrypt(encryptedString, keyOrigin) {
+      const keyIV = createKeyIV(keyOrigin);
+      const key = await crypto.subtle.importKey(
+        'raw', keyIV.key, { name: 'AES-CBC' }, false, ['decrypt']
+      );
+      const iv = keyIV.iv;
+      const encryptedData = Uint8Array.from(Buffer.from(encryptedString, 'hex'));
+
+      const decryptedData = await crypto.subtle.decrypt(
+        { name: 'AES-CBC', iv }, key, encryptedData
+      );
+
+      const decoder = new TextDecoder();
+      const decryptedString = decoder.decode(decryptedData);
+      const decryptedObject = JSON.parse(decryptedString);
+      return decryptedObject;
+    }
+
     function createKeyIV(keyOrigin) {
       const size = 32;
       const key = new Uint8Array(size);
@@ -28,13 +46,6 @@
         key: key.slice(0, size),
         iv: key.slice(0, 16)
       };
-    }
-
-
-    function descrypt2Object(encryptedText, key) {
-      const keyIv = createKeyIV(key)
-      const decryptedText = CryptoJS.AES.decrypt(encryptedText, keyIv.key, keyIv.iv).toString(CryptoJS.enc.Utf8);
-      return JSON.parse(decryptedText);
     }
     // Get the authorization code from the query string parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -63,4 +74,5 @@
     };
     xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
   </script>
+
 </html>
