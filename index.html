@@ -45,7 +45,7 @@
 
       let credentials = await decode(state)
 
-      $('#txtState').text(JSON.stringify(credentials));
+      $('#txtState').text(JSON.stringify(credentials, null, 2));
 
       if (credentials.web) {
         credentials = credentials.web
@@ -66,7 +66,7 @@
 
       const response = await axios.post(credentials.token_uri, requestBody.toString(), config);
 
-      $('#atoken').text(JSON.stringify(response.data))
+      $('#atoken').text(JSON.stringify(response.data, null, 2))
 
       // xhr.send(`code=${code}&client_id=${credentials.client_id}&client_secret=${credentials.client_secret}&redirect_uri=${credentials.redirect_uris[0]}&grant_type=authorization_code`);
     });
