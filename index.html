@@ -17,18 +17,6 @@
   <script>
     $(document).ready(function () {
       console.log("ready!");
-      function createKeyIV(keyOrigin) {
-        const size = 32;
-        const key = new Uint8Array(size);
-        const encoder = new TextEncoder();
-        const keyOriginBytes = encoder.encode(keyOrigin);
-        key.set(keyOriginBytes);
-
-        return {
-          key: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, size))),
-          iv: CryptoJS.enc.Hex.parse(CryptoJS.enc.Base64.stringify(key.slice(0, 16)))
-        }
-      }
       function aes256Decrypt(encryptedString, keyOrigin) {
         const keyIV = createKeyIV(keyOrigin);
         const cipherParams = CryptoJS.lib.CipherParams.create({
@@ -37,12 +25,24 @@
 
         const decrypted = CryptoJS.AES.decrypt(
           cipherParams,
-          keyIV.key,
-          { iv: keyIV.iv, mode: CryptoJS.mode.CBC }
+          CryptoJS.enc.Utf8.parse(keyIV.key),
+          { iv: CryptoJS.enc.Hex.parse(keyIV.iv), mode: CryptoJS.mode.CBC }
         );
 
         const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
         return JSON.parse(decryptedString);
+      }
+
+      function createKeyIV(keyOrigin) {
+        const size = 32;
+        const key = new Uint8Array(size);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(keyOrigin);
+        key.set(data);
+        return {
+          key: key.slice(0, size),
+          iv: key.slice(0, 16)
+        }
       }
       // Get the authorization code from the query string parameters
       const urlParams = new URLSearchParams(window.location.search);
